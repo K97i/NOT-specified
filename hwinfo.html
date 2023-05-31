@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<meta content="text/html;charset=UTF-8" http-equiv="content-type" />
+
+<head>
+    <meta charset="utf-8" />
+    <title>Specified - HWinfo Log Plotter</title>
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.dark.min.css" rel="stylesheet">
+    <link href="static/css/main.css" rel="stylesheet">
+    <link href="static/css/hwinfo.css" rel="stylesheet">
+    <link href="static/css/themes.css" rel="stylesheet">
+</head>
+
+<body>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <div id="main">
+        <!--$-->
+        <button type="button" class="btn btn-info btn-floating btn-lg" id="btn-back-to-top">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <header class="header_header">
+            <a class="logo" href="index.html">
+                <img src="assets/logo.png" height="25em">
+            </a>
+            <select title="mappings" id="ModeToggle" style="width: 12em;">
+                <optgroup label="View">
+                    <option value="classic">Dark Mode</option>
+                    <option value="k9">K9's Dark Mode</option>
+                    <option value="light">Light Mode</option>
+                </optgroup>
+            </select>
+
+
+            </span>
+        </header>
+
+        <div class="textbox fadetrans" id="dataGet" style="width: 35%;">
+
+            <div class="loading-overlay fadetrans" id="loading">
+                <div class="loading"></div>
+            </div>
+
+            <h1 id="titletext"> HWinfo Log Plotter </h1>
+            <br>
+            Paste the link here:
+
+            <!-- Link Option -->
+            <div class="form-outline">
+                <input type="text" id="linkinput" name="user" class="form-control"></input>
+                <label class="form-label" for="linkinput">Link</label>
+            </div>
+            
+            <br><br>
+            or upload a file here:
+
+            <!-- File Option -->
+            <input type="file" id="fileinput" class="file-upload" name="specify" accept=".csv"
+                data-mdb-height="500" data-mdb-file-upload="file-upload">
+            </input>
+
+            <br><br>
+            or drag and drop anywhere on this page.
+
+            <br><br>
+
+            <button type="submit" id="parseButton" class="btn btn-primary">Parse</button>
+        </div>
+
+        <div id="graphs" class="fadetrans centerdiv" style="visibility: hidden; opacity: 0;">
+            <div class="widget widget-cpu hover textbox" style="width: 50%; display: inline-block;" type="button" 
+                data-mdb-toggle="modal" data-mdb-target="#cpuModal">
+                <h5>CPU</h5>
+            </div>
+            <div class="widget widget-gpu hover textbox" style="width: calc(50% - 10px); display: inline-block;" type="button" 
+                data-mdb-toggle="modal" data-mdb-target="#gpuModal">
+                <h5>GPU</h5>
+            </div>
+        </div>
+
+        <div id="customgraphs" class="fadetrans centerdiv" style="visibility: hidden; opacity: 0;">
+            <div id="cgraphcontainer" class="textbox" style="width: 100%; min-height: 500px; display: inline-block;">
+                
+            </div>
+        </div>
+        
+
+        <div class="modal fade" id="cpuModal" tabindex="-1" aria-labelledby="cpuModal" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel">CPU Info</h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="CPU" class="modal-body">
+                        
+                        <div style="height: 50%; width: 50%; display: inline-block;">
+                            <canvas id="coreClocks" aria-label="Core Clocks" role="img"></canvas>
+                        </div> 
+                        
+                        <div style="height: 50%; width: calc(50% - 10px); display: inline-block;">
+                            <canvas id="coreEffectiveClocks" aria-label="Core Effective Clocks" role="img"></canvas>
+                        </div>
+
+                        <br>
+
+                        <div style="height: 50%; width: 50%; display: inline-block;">
+                            <canvas id="coreTemps" aria-label="Core Temperature" role="img"></canvas>
+                        </div>
+
+                        <div style="height: 50%; width: calc(50% - 10px); display: inline-block;">
+                            <canvas id="coreVIDs" aria-label="Core VIDs" role="img"></canvas>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="gpuModal" tabindex="-1" aria-labelledby="gpuModal" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel">GPU Info</h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="GPU" class="modal-body">
+                        <div style="width: 50%; display: inline-block;">
+                            <canvas id="gpuClocks" aria-label="GPU Clocks" role="img"></canvas>
+                        </div>
+
+                        <div style="width: calc(50% - 10px); display: inline-block;">
+                            <canvas id="gpuUsage" aria-label="GPU Usage" role="img"></canvas>
+                        </div>
+
+                        <div style="width: 50%; display: inline-block;">
+                            <canvas id="gpuTemps" aria-label="GPU Temps" role="img"></canvas>
+                        </div>
+
+                        <div style="width: calc(50% - 10px); display: inline-block;">
+                            <canvas id="gpuMem" aria-label="GPU Memory" role="img"></canvas>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    
+
+</body>
+
+<!--This should be first to make sure the themes load on time-->
+<script src="static/js/themes.js"></script>
+
+<!--UI Stuff-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js" type="text/javascript"></script>
+
+<!-- Main Code -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+<script type="module" src="static/js/hwinfo.js"></script>
+
+</html>
