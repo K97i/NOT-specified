@@ -168,8 +168,6 @@ async function parse(data) {
 		)
 			.then((response) => response.blob())
 			.then((blob) => {
-				console.log(blob);
-
 				if (!(blob["type"].indexOf("text/csv") >= 0)) {
 					titletext.textContent = "Not a CSV!";
 					data = "";
@@ -395,8 +393,6 @@ function generateGPU() {
 			gpuMem.push(data);
 		}
 	}
-	console.log(gpuClocks);
-	console.log(gpuUsage);
 
 	var gpuClocksChart = new Chart("gpuClocks", {
 		type: "line",
@@ -542,7 +538,6 @@ function generateCustom() {
 				Math.random() * (255 - 0 + 1) + 0
 			)})`;
 		}
-		console.log(color);
 
 		customgraphChart.data.datasets.pop();
 		customgraphChart.data.datasets.push({
