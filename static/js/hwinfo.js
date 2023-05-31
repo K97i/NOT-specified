@@ -470,7 +470,9 @@ function generateCustom() {
 	var select = document.createElement("select");
 
 	select.id = "cgraphselect";
-	select.style.fontSize = "x-small";
+	select.style.fontSize = "small";
+	select.style.display = "block";
+	select.style.float = "left";
 
 	for (var key in chartdata) {
 		var option = document.createElement("option");
@@ -481,7 +483,33 @@ function generateCustom() {
 		select.append(option);
 	}
 
+	// add
+	var addbutton = document.createElement("button");
+
+	addbutton.type = "button";
+	addbutton.id = "addbutton";
+	addbutton.classList.add("btn");
+	addbutton.classList.add("btn-primary");
+	addbutton.style.display = "inline-block";
+	addbutton.style.float = "left";
+	addbutton.textContent = "Add Value";
+
+	var rembutton = document.createElement("button");
+
+	rembutton.type = "button";
+	rembutton.id = "rembutton";
+	rembutton.classList.add("btn");
+	rembutton.classList.add("btn-primary");
+	rembutton.style.display = "inline-block";
+	rembutton.style.float = "left";
+	rembutton.textContent = "Remove Value";
+
 	div.append(select);
+	div.append(document.createElement("br"));
+	div.append(document.createElement("br"));
+	div.append(rembutton);
+	div.append(addbutton);
+
 	div.append(canvas);
 	document.querySelector("#cgraphcontainer").append(div);
 
@@ -500,11 +528,54 @@ function generateCustom() {
 		},
 	});
 
-	/* customgraphChart.data.datasets.push({
-		label: document.querySelector("#cgraphselect").value,
-		data: chartdata[document.querySelector("#cgraphselect").value],
-		borderWidth: 1,
+	var color = "";
+
+	document.querySelector("#cgraphselect").addEventListener("change", () => {
+		if (customgraphChart.data.datasets.at(-1))
+			color = customgraphChart.data.datasets.at(-1).borderColor;
+		else if (customgraphChart.data.datasets.at(0))
+			color = customgraphChart.data.datasets.at(0).borderColor;
+		else {
+			color = `rgb(${Math.floor(
+				Math.random() * (255 - 0 + 1) + 0
+			)}, ${Math.floor(Math.random() * (255 - 0 + 1) + 0)}, ${Math.floor(
+				Math.random() * (255 - 0 + 1) + 0
+			)})`;
+		}
+		console.log(color);
+
+		customgraphChart.data.datasets.pop();
+		customgraphChart.data.datasets.push({
+			label: document.querySelector("#cgraphselect").value,
+			data: chartdata[document.querySelector("#cgraphselect").value],
+			borderWidth: 1,
+			borderColor: color,
+			backgroundColor: color,
+		});
+
+		customgraphChart.update();
 	});
 
-	customgraphChart.update(); */
+	document.querySelector("#addbutton").addEventListener("click", () => {
+		color = `rgb(${Math.floor(
+			Math.random() * (255 - 0 + 1) + 0
+		)}, ${Math.floor(Math.random() * (255 - 0 + 1) + 0)}, ${Math.floor(
+			Math.random() * (255 - 0 + 1) + 0
+		)})`;
+		customgraphChart.data.datasets.push({
+			label: document.querySelector("#cgraphselect").value,
+			data: chartdata[document.querySelector("#cgraphselect").value],
+			borderWidth: 1,
+			borderColor: color,
+			backgroundColor: color,
+		});
+
+		customgraphChart.update();
+	});
+
+	document.querySelector("#rembutton").addEventListener("click", () => {
+		customgraphChart.data.datasets.pop();
+
+		customgraphChart.update();
+	});
 }
