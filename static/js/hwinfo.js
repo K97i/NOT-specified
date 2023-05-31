@@ -196,6 +196,11 @@ async function parse(data) {
 	}
 
 	if (!Boolean(data)) {
+		document.querySelector("#loading").style.opacity = 0;
+		setTimeout(() => {
+			document.querySelector("#loading").style.visibility = "hidden";
+		}, "500");
+		document.querySelector("#linkinput").disabled = false;
 		return;
 	}
 
